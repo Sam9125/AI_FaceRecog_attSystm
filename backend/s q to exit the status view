@@ -1,0 +1,11 @@
+[0;1;32m●[0m mongod.service - MongoDB Database Server
+     Loaded: loaded (/lib/systemd/system/mongod.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Thu 2026-02-19 09:31:38 IST; 1 day 3h ago
+       Docs: https://docs.mongodb.org/manual
+   Main PID: 1295 (mongod)
+     Memory: 100.4M
+     CGroup: /system.slice/mongod.service
+             └─1295 /usr/bin/mongod --config /etc/mongod.conf
+
+Feb 19 09:31:38 devlogix-Latitude-5400 systemd[1]: Started MongoDB Database Server.
+Feb 19 09:31:43 devlogix-Latitude-5400 mongod[1295]: {"t":{"$date":"2026-02-19T04:01:43.027Z"},"s":"I",  "c":"CONTROL",  "id":7484500, "ctx":"main","msg":"Environment variable MONGODB_CONFIG_OVERRIDE_NOFORK == 1, overriding \"processManagement.fork\" to false"}
