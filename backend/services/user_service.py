@@ -38,10 +38,16 @@ class UserService:
             }
             
             result = self.collection.insert_one(user_dict)
-            user_dict["_id"] = str(result.inserted_id)
             
-            logger.info(f"User created: {user.email}")
-            return UserInDB(**user_dict)
+            # Fetch the created user to get the complete document
+            created_user = self.collection.find_one({"_id": result.inserted_id})
+            if created_user:
+                created_user["_id"] = str(created_user["_id"])
+                logger.info(f"User created: {user.email}")
+                return UserInDB(**created_user)
+            
+            logger.error("Failed to retrieve created user")
+            return None
         except Exception as e:
             logger.error(f"Error creating user: {e}")
             return None
