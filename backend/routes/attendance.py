@@ -84,16 +84,34 @@ async def mark_attendance(
                 detail="Failed to encode face"
             )
         
-        # Compare with stored encoding
-        is_match, confidence = face_service.compare_faces(
-            current_user.face_encoding,
-            detected_encoding
-        )
+        # SECURITY: Find which user this face belongs to by comparing with ALL registered users
+        registered_users = await user_service.get_users_with_face_encodings()
         
-        if not is_match or confidence < settings.MIN_CONFIDENCE_THRESHOLD:
+        best_match_user = None
+        best_confidence = 0.0
+        
+        for user in registered_users:
+            is_match, confidence = face_service.compare_faces(
+                user.face_encoding,
+                detected_encoding
+            )
+            
+            if is_match and confidence > best_confidence and confidence >= settings.MIN_CONFIDENCE_THRESHOLD:
+                best_match_user = user
+                best_confidence = confidence
+        
+        # Check if any face was recognized
+        if not best_match_user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Face does not match. Confidence: {confidence:.2%}"
+                detail="Face not recognized. Please ensure your face is registered and clearly visible."
+            )
+        
+        # CRITICAL SECURITY CHECK: Verify the recognized face matches the logged-in user
+        if str(best_match_user.id) != str(current_user.id):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Face mismatch! Detected face belongs to '{best_match_user.name}' but you are logged in as '{current_user.name}'. Please use your own registered face."
             )
         
         # Save attendance image
@@ -110,10 +128,10 @@ async def mark_attendance(
         )
         cv2.imwrite(filepath, annotated_image)
         
-        # Mark attendance
+        # Mark attendance (using best_confidence from face matching)
         attendance = AttendanceCreate(
             user_id=str(current_user.id),
-            confidence=confidence,
+            confidence=best_confidence,
             image_path=filepath
         )
         
@@ -125,12 +143,12 @@ async def mark_attendance(
                 detail="Failed to mark attendance"
             )
         
-        logger.info(f"Attendance marked for user: {email}, confidence: {confidence:.2%}")
+        logger.info(f"Attendance marked for user: {email}, confidence: {best_confidence:.2%}")
         
         return {
             "message": "Attendance marked successfully",
             "user_name": current_user.name,
-            "confidence": confidence,
+            "confidence": best_confidence,
             "timestamp": result.timestamp,
             "image_path": filepath
         }

@@ -299,7 +299,15 @@ function MarkAttendance({ user, onLogout }) {
         setMessage('');
       }, 3000);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to mark attendance');
+      const errorMsg = err.response?.data?.detail || 'Failed to mark attendance';
+      setError(errorMsg);
+      
+      // If face mismatch, keep the captured image visible for review
+      if (!errorMsg.includes('Face mismatch')) {
+        setTimeout(() => {
+          setCapturedImage(null);
+        }, 5000);
+      }
     } finally {
       setLoading(false);
     }
@@ -636,6 +644,8 @@ function MarkAttendance({ user, onLogout }) {
             </Typography>
             <ul>
               <li>Attendance can only be marked once per day</li>
+              <li>You must use YOUR OWN registered face</li>
+              <li>Using someone else's face will be rejected</li>
               <li>Ensure your face is clearly visible</li>
               <li>Good lighting improves recognition accuracy</li>
               <li>Look directly at the camera</li>
