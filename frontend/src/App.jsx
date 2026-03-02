@@ -21,6 +21,166 @@ const theme = createTheme({
       main: '#dc004e',
     },
   },
+  typography: {
+    fontSize: 13,
+    h4: {
+      fontSize: '1.6rem',
+      fontWeight: 600,
+      lineHeight: 1.2,
+    },
+    h5: {
+      fontSize: '1.3rem',
+      fontWeight: 600,
+      lineHeight: 1.25,
+    },
+    h6: {
+      fontSize: '1.05rem',
+      fontWeight: 600,
+      lineHeight: 1.3,
+    },
+    body1: {
+      fontSize: '0.9rem',
+      lineHeight: 1.4,
+    },
+    body2: {
+      fontSize: '0.82rem',
+      lineHeight: 1.35,
+    },
+    button: {
+      textTransform: 'none',
+      fontSize: '0.82rem',
+      fontWeight: 600,
+      lineHeight: 1.2,
+    },
+  },
+  shape: {
+    borderRadius: 10,
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          fontSize: '13px',
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          [theme.breakpoints.down('sm')]: {
+            paddingLeft: theme.spacing(1.25),
+            paddingRight: theme.spacing(1.25),
+          },
+        }),
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          [theme.breakpoints.down('sm')]: {
+            borderRadius: 10,
+          },
+        }),
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          [theme.breakpoints.down('sm')]: {
+            borderRadius: 10,
+          },
+        }),
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          padding: theme.spacing(1.75),
+          '&:last-child': {
+            paddingBottom: theme.spacing(1.75),
+          },
+          [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(1.5),
+            '&:last-child': {
+              paddingBottom: theme.spacing(1.5),
+            },
+          },
+        }),
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        size: 'medium',
+      },
+      styleOverrides: {
+        root: ({ theme }) => ({
+          minHeight: 38,
+          paddingLeft: theme.spacing(1.75),
+          paddingRight: theme.spacing(1.75),
+          [theme.breakpoints.down('sm')]: {
+            minHeight: 34,
+            paddingLeft: theme.spacing(1.25),
+            paddingRight: theme.spacing(1.25),
+            fontSize: '0.78rem',
+          },
+        }),
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        size: 'small',
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          minHeight: 38,
+          [theme.breakpoints.down('sm')]: {
+            minHeight: 34,
+          },
+        }),
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          minHeight: 38,
+          fontSize: '0.82rem',
+          paddingLeft: theme.spacing(1.25),
+          paddingRight: theme.spacing(1.25),
+          [theme.breakpoints.down('sm')]: {
+            minHeight: 34,
+            fontSize: '0.75rem',
+            paddingLeft: theme.spacing(0.75),
+            paddingRight: theme.spacing(0.75),
+          },
+        }),
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          [theme.breakpoints.down('sm')]: {
+            height: 24,
+            fontSize: '0.72rem',
+          },
+        }),
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          paddingTop: theme.spacing(1),
+          paddingBottom: theme.spacing(1),
+          [theme.breakpoints.down('sm')]: {
+            paddingTop: theme.spacing(0.75),
+            paddingBottom: theme.spacing(0.75),
+            fontSize: '0.75rem',
+          },
+        }),
+      },
+    },
+  },
 });
 
 function App() {

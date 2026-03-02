@@ -13,14 +13,35 @@ function Navbar({ user, onLogout }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navButtonSx = isMobile
+    ? {
+        minWidth: 'auto',
+        px: 1,
+        fontSize: '0.72rem',
+        lineHeight: 1.1,
+      }
+    : {};
 
   return (
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar
+        sx={{
+          minHeight: { xs: 52, sm: 60 },
+          px: { xs: 1, sm: 2 },
+          gap: 0.5,
+        }}
+      >
         <Typography
           variant="h6"
           component="div"
-          sx={{ mr: 2, flexShrink: 0, fontSize: { xs: '1rem', sm: '1.25rem' } }}
+          sx={{
+            mr: { xs: 0.5, sm: 2 },
+            flexShrink: 0,
+            fontSize: { xs: '0.9rem', sm: '1.25rem' },
+            maxWidth: { xs: 90, sm: 'none' },
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
         >
           {isMobile ? 'Attendance' : 'AI Attendance System'}
         </Typography>
@@ -28,36 +49,67 @@ function Navbar({ user, onLogout }) {
         <Box
           sx={{
             display: 'flex',
-            gap: 1,
+            gap: { xs: 0.25, sm: 1 },
             flexGrow: 1,
             overflowX: 'auto',
             whiteSpace: 'nowrap',
             '&::-webkit-scrollbar': { display: 'none' },
             scrollbarWidth: 'none',
+            alignItems: 'center',
           }}
         >
-          <Button color="inherit" startIcon={<DashboardIcon />} onClick={() => navigate('/dashboard')}>
-            Dashboard
+          <Button
+            color="inherit"
+            size={isMobile ? 'small' : 'medium'}
+            startIcon={isMobile ? null : <DashboardIcon />}
+            sx={navButtonSx}
+            onClick={() => navigate('/dashboard')}
+          >
+            {isMobile ? 'Dash' : 'Dashboard'}
           </Button>
           
           {!user.has_face_registered && (
-            <Button color="inherit" startIcon={<FaceIcon />} onClick={() => navigate('/register-face')}>
-              Register Face
+            <Button
+              color="inherit"
+              size={isMobile ? 'small' : 'medium'}
+              startIcon={isMobile ? null : <FaceIcon />}
+              sx={navButtonSx}
+              onClick={() => navigate('/register-face')}
+            >
+              {isMobile ? 'Face' : 'Register Face'}
             </Button>
           )}
           
           {user.has_face_registered && (
-            <Button color="inherit" startIcon={<CheckCircleIcon />} onClick={() => navigate('/mark-attendance')}>
-              Mark Attendance
+            <Button
+              color="inherit"
+              size={isMobile ? 'small' : 'medium'}
+              startIcon={isMobile ? null : <CheckCircleIcon />}
+              sx={navButtonSx}
+              onClick={() => navigate('/mark-attendance')}
+            >
+              {isMobile ? 'Mark' : 'Mark Attendance'}
             </Button>
           )}
           
-          <Button color="inherit" startIcon={<HistoryIcon />} onClick={() => navigate('/history')}>
-            History
+          <Button
+            color="inherit"
+            size={isMobile ? 'small' : 'medium'}
+            startIcon={isMobile ? null : <HistoryIcon />}
+            sx={navButtonSx}
+            onClick={() => navigate('/history')}
+          >
+            {isMobile ? 'Hist' : 'History'}
           </Button>
           
           {user.role === 'admin' && (
-            <Button color="inherit" startIcon={<AdminPanelSettingsIcon />} onClick={() => navigate('/admin')}>
+            <Button
+              color="inherit"
+              size={isMobile ? 'small' : 'medium'}
+              startIcon={isMobile ? null : <AdminPanelSettingsIcon />}
+              sx={navButtonSx}
+              onClick={() => navigate('/admin')}
+            >
               Admin
             </Button>
           )}
