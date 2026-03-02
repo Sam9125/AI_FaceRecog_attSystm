@@ -12,7 +12,10 @@ class Database:
     def connect_db(cls):
         """Connect to MongoDB"""
         try:
-            cls.client = MongoClient(settings.MONGODB_URL)
+            cls.client = MongoClient(
+                settings.MONGODB_URL,
+                serverSelectionTimeoutMS=5000
+            )
             # Test connection
             cls.client.admin.command('ping')
             logger.info("Successfully connected to MongoDB")

@@ -34,13 +34,13 @@ function Dashboard({ user, onLogout }) {
   return (
     <>
       <Navbar user={user} onLogout={onLogout} />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
+      <Container maxWidth="lg" sx={{ mt: { xs: 2, sm: 4 }, mb: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
+        <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.6rem', sm: '2.125rem' } }}>
           Welcome, {user.name}!
         </Typography>
 
         {!user.has_face_registered && (
-          <Paper sx={{ p: 3, mb: 3, bgcolor: '#fff3cd', borderLeft: '4px solid #ffc107' }}>
+          <Paper sx={{ p: { xs: 2, sm: 3 }, mb: 3, bgcolor: '#fff3cd', borderLeft: '4px solid #ffc107' }}>
             <Typography variant="h6" color="warning.dark">
               Action Required: Register Your Face
             </Typography>
@@ -100,7 +100,7 @@ function Dashboard({ user, onLogout }) {
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 3 }}>
+            <Paper sx={{ p: { xs: 2, sm: 3 } }}>
               <Typography variant="h6" gutterBottom>
                 Attendance Overview (Last 30 Days)
               </Typography>
@@ -130,7 +130,7 @@ function Dashboard({ user, onLogout }) {
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 3 }}>
+            <Paper sx={{ p: { xs: 2, sm: 3 } }}>
               <Typography variant="h6" gutterBottom>
                 Recent Attendance
               </Typography>

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 import logging
 import sys
@@ -76,10 +77,28 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "database": "connected"
-    }
+    db_status = "disconnected"
+    app_status = "healthy"
+    status_code = 200
+
+    try:
+        if Database.client:
+            Database.client.admin.command("ping")
+            db_status = "connected"
+        else:
+            app_status = "unhealthy"
+            status_code = 503
+    except Exception:
+        app_status = "unhealthy"
+        status_code = 503
+
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "status": app_status,
+            "database": db_status
+        }
+    )
 
 if __name__ == "__main__":
     import uvicorn

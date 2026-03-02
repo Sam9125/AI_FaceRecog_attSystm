@@ -94,9 +94,9 @@ function FaceRegistration({ user, onLogout }) {
   return (
     <>
       <Navbar user={user} onLogout={onLogout} />
-      <Container maxWidth="md" sx={{ mt: 4 }}>
-        <Paper sx={{ p: 4 }}>
-          <Typography variant="h4" gutterBottom>
+      <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
+        <Paper sx={{ p: { xs: 2, sm: 4 } }}>
+          <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.6rem', sm: '2.125rem' } }}>
             Register Your Face
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -145,13 +145,14 @@ function FaceRegistration({ user, onLogout }) {
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 width="100%"
+                style={{ borderRadius: 8, maxHeight: '55vh', objectFit: 'cover' }}
                 videoConstraints={{
                   width: 1280,
                   height: 720,
                   facingMode: 'user',
                 }}
               />
-              <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+              <Box sx={{ mt: 2, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
                 <Button
                   variant="contained"
                   onClick={capture}
@@ -176,7 +177,7 @@ function FaceRegistration({ user, onLogout }) {
                   <Typography variant="h6">Captured Images ({capturedImages.length})</Typography>
                   <Grid container spacing={2} sx={{ mt: 1 }}>
                     {capturedImages.map((img, idx) => (
-                      <Grid item xs={4} key={idx}>
+                      <Grid item xs={6} sm={4} key={idx}>
                         <img src={img} alt={`Captured ${idx}`} style={{ width: '100%' }} />
                       </Grid>
                     ))}

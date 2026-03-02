@@ -1,0 +1,14 @@
+{
+  "appId": "com.samishu.attendance",
+  "appName": "Attendance System",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  }
+}

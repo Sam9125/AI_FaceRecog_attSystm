@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 from typing import List
 import os
 
@@ -31,17 +32,45 @@ class Settings(BaseSettings):
     ATTENDANCE_IMAGES_DIR: str = "./uploads/attendance"
     
     # CORS
-    ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:5173"
+    ALLOWED_ORIGINS: str = (
+        "http://localhost:3000,"
+        "http://localhost:5173,"
+        "http://localhost,"
+        "https://localhost,"
+        "capacitor://localhost"
+    )
     
     class Config:
         env_file = ".env"
         case_sensitive = True
+
+    @field_validator("DEBUG", mode="before")
+    @classmethod
+    def parse_debug(cls, value):
+        """Allow common string values from shell env (e.g. DEBUG=release)."""
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if normalized in {"1", "true", "yes", "on", "debug", "dev", "development"}:
+                return True
+            if normalized in {"0", "false", "no", "off", "release", "prod", "production"}:
+                return False
+        return bool(value)
     
     def get_allowed_origins(self) -> List[str]:
         """Parse ALLOWED_ORIGINS string into list"""
         if isinstance(self.ALLOWED_ORIGINS, str):
-            return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",")]
-        return self.ALLOWED_ORIGINS
+            origins = [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
+        else:
+            origins = list(self.ALLOWED_ORIGINS)
+
+        # Keep Capacitor localhost origins available for mobile builds.
+        for mobile_origin in ("capacitor://localhost", "https://localhost", "http://localhost"):
+            if mobile_origin not in origins:
+                origins.append(mobile_origin)
+
+        return origins
 
 settings = Settings()
 

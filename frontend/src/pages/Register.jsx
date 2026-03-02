@@ -57,17 +57,21 @@ function Register() {
       
       navigate('/login');
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed. Please try again.');
+      if (!err.response) {
+        setError('Cannot reach server. Check FastAPI is running and phone/laptop are on same Wi-Fi.');
+      } else {
+        setError(err.response?.data?.detail || 'Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8 }}>
-        <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h4" align="center" gutterBottom>
+    <Container maxWidth="sm" sx={{ px: { xs: 1.5, sm: 2 } }}>
+      <Box sx={{ mt: { xs: 2, sm: 8 }, mb: { xs: 2, sm: 0 } }}>
+        <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
+          <Typography variant="h4" align="center" gutterBottom sx={{ fontSize: { xs: '1.7rem', sm: '2.125rem' } }}>
             Register
           </Typography>
 

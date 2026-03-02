@@ -50,10 +50,10 @@ function Login({ onLogin }) {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8 }}>
-        <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h4" align="center" gutterBottom>
+    <Container maxWidth="sm" sx={{ px: { xs: 1.5, sm: 2 } }}>
+      <Box sx={{ mt: { xs: 2, sm: 8 }, mb: { xs: 2, sm: 0 } }}>
+        <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 } }}>
+          <Typography variant="h4" align="center" gutterBottom sx={{ fontSize: { xs: '1.7rem', sm: '2.125rem' } }}>
             Login
           </Typography>
           <Typography variant="body2" align="center" color="textSecondary" gutterBottom>

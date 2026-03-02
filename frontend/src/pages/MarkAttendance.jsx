@@ -9,9 +9,13 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import * as faceapi from 'face-api.js';
 
 function MarkAttendance({ user, onLogout }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
@@ -35,6 +39,7 @@ function MarkAttendance({ user, onLogout }) {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [faceExpression, setFaceExpression] = useState(null);
   const [detectionKey, setDetectionKey] = useState(0); // Key to force restart detection
+  const canCapture = faceDetected || !modelsLoaded;
 
   useEffect(() => {
     // Load face-api.js models for real face detection
@@ -996,9 +1001,9 @@ function MarkAttendance({ user, onLogout }) {
   return (
     <>
       <Navbar user={user} onLogout={onLogout} />
-      <Container maxWidth="md" sx={{ mt: 4 }}>
-        <Paper sx={{ p: 4 }}>
-          <Typography variant="h4" gutterBottom>
+      <Container maxWidth="md" sx={{ mt: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
+        <Paper sx={{ p: { xs: 2, sm: 4 } }}>
+          <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.6rem', sm: '2.125rem' } }}>
             Mark Attendance
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -1008,7 +1013,7 @@ function MarkAttendance({ user, onLogout }) {
           {message && <Alert severity="success" sx={{ mt: 2 }}>{message}</Alert>}
           {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
 
-          <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+          <Box sx={{ mt: 3, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
             <Button
               variant={useWebcam ? 'contained' : 'outlined'}
               startIcon={<CameraAltIcon />}
@@ -1044,6 +1049,7 @@ function MarkAttendance({ user, onLogout }) {
                       screenshotFormat="image/jpeg"
                       style={{ 
                         width: '100%', 
+                        maxHeight: isMobile ? '56vh' : 'unset',
                         display: 'block', 
                         filter: 'brightness(0.8)',
                         position: 'relative',
@@ -1079,8 +1085,8 @@ function MarkAttendance({ user, onLogout }) {
                           bgcolor: 'rgba(0, 0, 0, 0.8)',
                           border: '2px solid #00d4ff',
                           color: '#00d4ff',
-                          px: 4,
-                          py: 3,
+                          px: { xs: 2, sm: 4 },
+                          py: { xs: 2, sm: 3 },
                           borderRadius: 2,
                           display: 'flex',
                           flexDirection: 'column',
@@ -1110,7 +1116,7 @@ function MarkAttendance({ user, onLogout }) {
                           bgcolor: faceDetected ? 'rgba(0, 40, 20, 0.9)' : 'rgba(40, 0, 0, 0.9)',
                           border: faceDetected ? '1px solid #00ff88' : '1px solid #ff0066',
                           color: faceDetected ? '#00ff88' : '#ff0066',
-                          px: 3,
+                          px: { xs: 1.5, sm: 3 },
                           py: 1,
                           borderRadius: 1,
                           display: 'flex',
@@ -1120,14 +1126,18 @@ function MarkAttendance({ user, onLogout }) {
                         }}
                       >
                         <CircularProgress size={16} sx={{ color: faceDetected ? '#00ff88' : '#ff0066' }} />
-                        <Typography variant="body2" fontWeight="bold" sx={{ fontFamily: 'monospace' }}>
-                          {autoCapture ? '📸 AUTO-CAPTURING...' : faceDetected ? 'FACE DETECTED - SCANNING' : 'NO FACE DETECTED'}
+                        <Typography variant="body2" fontWeight="bold" sx={{ fontFamily: 'monospace', fontSize: { xs: '0.7rem', sm: '0.875rem' } }}>
+                          {autoCapture
+                            ? 'AUTO-CAPTURING...'
+                            : faceDetected
+                              ? (isMobile ? 'FACE DETECTED' : 'FACE DETECTED - SCANNING')
+                              : (isMobile ? 'NO FACE' : 'NO FACE DETECTED')}
                         </Typography>
                       </Box>
                     )}
 
                     {/* Biometric Data Panels - Right Side */}
-                    {faceDetected && (
+                    {faceDetected && !isMobile && (
                       <Box
                         sx={{
                           position: 'absolute',
@@ -1329,7 +1339,8 @@ function MarkAttendance({ user, onLogout }) {
                         sx={{
                           position: 'absolute',
                           bottom: 16,
-                          left: 16,
+                          left: isMobile ? '50%' : 16,
+                          transform: isMobile ? 'translateX(-50%)' : 'none',
                           bgcolor: 'rgba(0, 255, 136, 0.2)',
                           color: '#00ff88',
                           px: 2,
@@ -1344,7 +1355,7 @@ function MarkAttendance({ user, onLogout }) {
                       >
                         <CheckCircleIcon fontSize="small" />
                         <Typography variant="caption" fontWeight="bold" sx={{ fontFamily: 'monospace' }}>
-                          ANALYZING DATA • {Math.round(scanProgress)}%
+                          {isMobile ? `ANALYZING ${Math.round(scanProgress)}%` : `ANALYZING DATA • ${Math.round(scanProgress)}%`}
                         </Typography>
                       </Box>
                     )}
@@ -1354,17 +1365,23 @@ function MarkAttendance({ user, onLogout }) {
                     size="large"
                     fullWidth
                     onClick={handleCapture}
-                    disabled={loading || !faceDetected}
+                    disabled={loading || !canCapture}
                     sx={{ 
                       mt: 2,
-                      bgcolor: faceDetected ? '#00ff00' : undefined,
-                      color: faceDetected ? '#000' : undefined,
+                      bgcolor: canCapture ? '#00ff00' : undefined,
+                      color: canCapture ? '#000' : undefined,
                       '&:hover': {
-                        bgcolor: faceDetected ? '#00cc00' : undefined,
+                        bgcolor: canCapture ? '#00cc00' : undefined,
                       }
                     }}
                   >
-                    {loading ? 'Processing...' : faceDetected ? 'Capture & Mark Attendance' : 'Position Your Face'}
+                    {loading
+                      ? 'Processing...'
+                      : faceDetected
+                        ? 'Capture & Mark Attendance'
+                        : !modelsLoaded
+                          ? 'Capture & Mark Attendance (Fallback)'
+                          : 'Position Your Face'}
                   </Button>
                 </>
               ) : (

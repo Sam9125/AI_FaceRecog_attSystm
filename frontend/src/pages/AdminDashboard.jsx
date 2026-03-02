@@ -96,13 +96,13 @@ function AdminDashboard({ user, onLogout }) {
   return (
     <>
       <Navbar user={user} onLogout={onLogout} />
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Typography variant="h4" gutterBottom>
+      <Container maxWidth="lg" sx={{ mt: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
+        <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.6rem', sm: '2.125rem' } }}>
           Admin Dashboard
         </Typography>
 
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
-          <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
+          <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} variant="scrollable" allowScrollButtonsMobile>
             <Tab icon={<AssessmentIcon />} label="Attendance Reports" />
             <Tab icon={<PeopleIcon />} label="User Management" />
           </Tabs>
@@ -159,9 +159,10 @@ function AdminDashboard({ user, onLogout }) {
               </Grid>
             )}
 
-            <Paper sx={{ p: 4 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+            <Paper sx={{ p: { xs: 2, sm: 4 } }}>
+              <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', gap: 2, mb: 3 }}>
                 <TextField
+                  fullWidth
                   label="Select Date"
                   type="date"
                   value={selectedDate}
@@ -173,12 +174,13 @@ function AdminDashboard({ user, onLogout }) {
                   startIcon={<DownloadIcon />}
                   onClick={downloadCSV}
                   disabled={!attendance.length}
+                  fullWidth={false}
                 >
                   Download CSV
                 </Button>
               </Box>
 
-              <TableContainer>
+              <TableContainer sx={{ overflowX: 'auto' }}>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -231,8 +233,8 @@ function AdminDashboard({ user, onLogout }) {
         )}
 
         {tabValue === 1 && (
-          <Paper sx={{ p: 4 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Paper sx={{ p: { xs: 2, sm: 4 } }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 1, mb: 3 }}>
               <Typography variant="h5">All Registered Users</Typography>
               <Chip 
                 label={`Total: ${users.length}`} 
@@ -241,7 +243,7 @@ function AdminDashboard({ user, onLogout }) {
               />
             </Box>
 
-            <TableContainer>
+            <TableContainer sx={{ overflowX: 'auto' }}>
               <Table>
                 <TableHead>
                   <TableRow>

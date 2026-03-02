@@ -40,14 +40,15 @@ function AttendanceHistory({ user, onLogout }) {
   return (
     <>
       <Navbar user={user} onLogout={onLogout} />
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Paper sx={{ p: 4 }}>
-          <Typography variant="h4" gutterBottom>
+      <Container maxWidth="lg" sx={{ mt: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
+        <Paper sx={{ p: { xs: 2, sm: 4 } }}>
+          <Typography variant="h4" gutterBottom sx={{ fontSize: { xs: '1.6rem', sm: '2.125rem' } }}>
             My Attendance History
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, mb: 3 }}>
             <TextField
+              fullWidth
               label="Start Date"
               type="date"
               value={startDate}
@@ -55,6 +56,7 @@ function AttendanceHistory({ user, onLogout }) {
               InputLabelProps={{ shrink: true }}
             />
             <TextField
+              fullWidth
               label="End Date"
               type="date"
               value={endDate}
@@ -63,7 +65,7 @@ function AttendanceHistory({ user, onLogout }) {
             />
           </Box>
 
-          <TableContainer>
+          <TableContainer sx={{ overflowX: 'auto' }}>
             <Table>
               <TableHead>
                 <TableRow>
